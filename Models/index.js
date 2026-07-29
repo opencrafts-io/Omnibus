@@ -5,7 +5,6 @@ import Trip from './Trip.model.js';
 import TripSeat from './Trip_seat.model.js';
 import Booking from './Bookings.model.js';
 import BookingSeat from './Booking_seats.model.js';
-import PaymentInfo from './payment_info.model.js';
 import Transaction from './transactions.model.js';
 
 // ==================== USER ASSOCIATIONS ====================
@@ -148,6 +147,5 @@ export {
   TripSeat,
   Booking,
   BookingSeat,
-  PaymentInfo,
   Transaction
 };
