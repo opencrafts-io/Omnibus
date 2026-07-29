@@ -1,0 +1,13 @@
+diff --git a/node_modules/glob/dist/esm/bin.mjs b/node_modules/glob/dist/esm/bin.mjs
+index d4511ae..6ff8b0a 100755
+--- a/node_modules/glob/dist/esm/bin.mjs
++++ b/node_modules/glob/dist/esm/bin.mjs
+@@ -334,7 +334,7 @@ try {
+                 process.emitWarning('The --shell option is unsafe, and will be removed. To pass ' +
+                     'positional arguments to the subprocess, use -g/--cmd-arg instead.', 'DeprecationWarning', 'GLOB_SHELL');
+             }
+-            stream.on('end', () => foregroundChild(cmd, cmdArg, { shell }));
++            stream.on('end', () => foregroundChild(cmd, cmdArg, { shell: false }));
+         }
+     }
+ }
