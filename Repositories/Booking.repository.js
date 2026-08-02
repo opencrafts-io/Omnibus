@@ -95,7 +95,7 @@ export const getUserBookingsRepository = async (userId, limitPlusOne, offset) =>
             {
               model: Vehicle,
               as: "vehicle",
-              attributes: ["operator_name", "vehicle_type", "service_class"]
+              attributes: ["operator_name", "vehicle_type", "service_class" , "registration_number"]
             }
           ]
         },
@@ -107,7 +107,7 @@ export const getUserBookingsRepository = async (userId, limitPlusOne, offset) =>
         {
           model: BookingSeat,
           as: "passengers",
-          attributes: ["id", "seat_number", "passenger_name"]
+          attributes: ["id", "seat_number", "passenger_name" , "passenger_gender", "passenger_contact"]
         }
       ]
     });

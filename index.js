@@ -27,6 +27,8 @@ import tripRoutes from "./Routes/Trip.routes.js";
 import bookingRoutes from "./Routes/Booking.routes.js";
 import bookingSeatRoutes from "./Routes/Booking_seat.routes.js";
 import tripSeatRoutes from "./Routes/Trip.seat.routes.js";
+import dashboardRoutes from "./Routes/Dashboard.routes.js";
+import adminRoutes from "./Routes/Admin.routes.js";
 
 
 app.use('/user', userRouter)
@@ -35,6 +37,8 @@ app.use('/trip', tripRoutes)
 app.use('/booking', bookingRoutes)
 app.use('/booking_seat', bookingSeatRoutes)
 app.use('/trip_seat', tripSeatRoutes)
+app.use('/dashboard', dashboardRoutes)
+app.use('/admin', adminRoutes)
 
 
 
