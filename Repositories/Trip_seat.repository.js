@@ -1,5 +1,5 @@
 // repositories/tripSeatRepository.js
-import { TripSeat, Trip, Vehicle, Booking , User } from "../Models/index.js";
+import { TripSeat, Trip, Vehicle, Booking , User , BookingSeat } from "../Models/index.js";
 import { Op } from "sequelize";
 
 export const createTripSeatRepository = async (seatData, options = {}) => {
@@ -22,10 +22,11 @@ export const bulkCreateTripSeatsRepository = async (seatsData, options = {}) => 
 
 // repositories/tripSeatRepository.js
 
+// repositories/tripSeatRepository.js
+
 export const getSeatByIdRepository = async (seatId) => {
   try {
     const seat = await TripSeat.findByPk(seatId, {
-      // Exclude redundant foreign keys from the top-level seat record
       attributes: {
         exclude: ["vehicle_id", "trip_id", "booking_id", "booked_by"]
       },
@@ -33,7 +34,6 @@ export const getSeatByIdRepository = async (seatId) => {
         {
           model: Trip,
           as: "trip",
-          // Exclude vehicle_id from trip since vehicle object is included below it
           attributes: {
             exclude: ["vehicle_id"]
           },
@@ -52,14 +52,43 @@ export const getSeatByIdRepository = async (seatId) => {
             {
               model: User,
               as: "user",
-              attributes: [ "email", "name", "phone"]
+              attributes: ["id", "email", "name", "phone"]
             }
           ]
         }
       ]
     });
-    return seat;
+
+    if (!seat) {
+      return null;
+    }
+
+    const seatData = seat.toJSON();
+
+    // If the seat is booked, get passenger details for this specific seat
+    if (seatData.booking && seatData.is_available === false) {
+      const passenger = await BookingSeat.findOne({
+        where: {
+          booking_id: seatData.booking.id,
+          seat_number: seatData.seat_number
+        },
+        attributes: [
+          "id", 
+          "seat_number", 
+          "passenger_name", 
+          "passenger_gender", 
+          "passenger_contact"
+        ]
+      });
+
+      if (passenger) {
+        seatData.passenger = passenger.toJSON();
+      }
+    }
+
+    return seatData;
   } catch (error) {
+    console.error('Error in getSeatByIdRepository:', error);
     throw error;
   }
 };
