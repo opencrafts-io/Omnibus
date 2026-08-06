@@ -10,7 +10,8 @@ import {
   cancelBookingRepository,
   getBookingStatisticsRepository,
   getTotalBookingsForTripRepository,
-  getTransactionByBookingIdRepository
+  getTransactionByBookingIdRepository,
+  getAllBookingsRepository
 } from "../Repositories/Booking.repository.js";
 import {
   bookSeatsRepository,
@@ -246,6 +247,34 @@ export const initiateBookingPaymentController = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getAllBookingsController = async (req, res) => {
+  const start = process.hrtime.bigint();
+
+  try {
+      const { limit, page, limitPlusOne, offset } = req.pagination;
+    const result = await getAllBookingsRepository(limitPlusOne, offset);
+
+    const hasNextPage = result.length > limit;
+    const bookings = hasNextPage ? result.slice(0, limit) : result;
+
+    const duration = Number(process.hrtime.bigint() - start) / 1000;
+    logs(duration, "INFO", req.ip, req.method, "User bookings retrieved", req.path, 200, req.headers["user-agent"]);
+
+    return res.status(200).json({
+      status: "success",
+      currentPage: page,
+      nextPage: hasNextPage ? page + 1 : null,
+      previousPage: page > 1 ? page - 1 : null,
+      totalBookings: bookings.length,
+      data: bookings
+    });
+  } catch (error) {
+    const duration = Number(process.hrtime.bigint() - start) / 1000;
+    logs(duration, "ERR", req.ip, req.method, error.message, req.path, 500, req.headers["user-agent"]);
+    res.status(500).json({ error: error.message });
+  }
+}
 
 // ==================== VERIFY BOOKING PAYMENT ====================
 export const verifyBookingPaymentController = async (req, res) => {
