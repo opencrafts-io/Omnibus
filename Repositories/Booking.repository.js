@@ -11,6 +11,42 @@ export const createBookingRepository = async (bookingData, options = {}) => {
   }
 };
 
+export const getAllBookingsRepository = async (limitPlusOne, offset) => {
+ try {
+    const bookings = await Booking.findAll({
+      order: [["booking_date", "DESC"]],
+      limit: limitPlusOne,
+      offset,
+      include: [
+        {
+          model: Trip,
+          as: "trip",
+          include: [
+            {
+              model: Vehicle,
+              as: "vehicle",
+              attributes: ["operator_name", "vehicle_type", "service_class" , "registration_number"]
+            }
+          ]
+        },
+        {
+          model: TripSeat,
+          as: "seats",
+          attributes: ["id", "seat_number", "seat_type", "price"]
+        },
+        {
+          model: BookingSeat,
+          as: "passengers",
+          attributes: ["id", "seat_number", "passenger_name" , "passenger_gender", "passenger_contact"]
+        }
+      ]
+    });
+    return bookings;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getBookingByIdRepository = async (bookingId) => {
   try {
     const booking = await Booking.findByPk(bookingId, {

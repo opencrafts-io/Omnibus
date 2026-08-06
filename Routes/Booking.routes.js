@@ -5,7 +5,8 @@ import {
   verifyBookingPaymentController,
   paymentCallbackController,
   getBookingByIdController,
-  getUserBookingsController
+  getUserBookingsController,
+  getAllBookingsController
 } from "../Controllers/Booking.controller.js";
 import { verifyToken } from "../Middleware/jwt_token_verification.js";
 import { paginate } from "../Middleware/paginate.js";
@@ -21,6 +22,9 @@ router.get("/verify-payment/:id", verifyBookingPaymentController);
 
 // User routes
 router.get("/user", paginate, getUserBookingsController);
+
+// Admin/Operator routes
+router.get("/all", paginate, getAllBookingsController);
 router.get("/:id", getBookingByIdController);
 
 // Public webhook for payment callbacks (no auth required)

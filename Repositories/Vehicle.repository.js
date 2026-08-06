@@ -107,15 +107,18 @@ export const deleteVehicleRepository = async (vehicleId) => {
 
 export const getVehicleByRegistrationRepository = async (registrationNumber) => {
   try {
-    const vehicle = await Vehicle.findOne({
-      where: { registration_number: registrationNumber }
+    const vehicle = await Vehicle.findAll({
+      where: { 
+        registration_number: {
+          [Op.iLike]: `%${registrationNumber}%` // Add % wildcards for partial matching
+        }
+      }
     });
     return vehicle;
   } catch (error) {
     throw error;
   }
 };
-
 export const getVehiclesByTypeRepository = async (vehicleType) => {
   try {
     const vehicles = await Vehicle.findAll({

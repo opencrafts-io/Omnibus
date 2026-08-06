@@ -211,7 +211,7 @@ export const getVehicleByRegistrationController = async (req, res) => {
 
   try {
     const { registration } = req.params;
-
+    console.log(registration)
     if (!registration) {
       const duration = Number(process.hrtime.bigint() - start) / 1000;
       logs(duration, "WARN", req.ip, req.method, "Missing vehicle registration", req.path, 400, req.headers["user-agent"]);
